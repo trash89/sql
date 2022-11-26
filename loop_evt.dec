@@ -1,0 +1,24 @@
+--
+--      Script:   loop_evt.dec
+--      Author:   J P Lewis
+--      Dated:    22-Jan-1999
+--      Purpose:  Declarations for system_event procedure
+--
+
+cursor c_system_event is
+select 
+      d.indx            indx,    
+      d.kslednam        event, 
+      s.ksleswts        total_waits, 
+      s.kslestim        time_waited
+from
+      x$kslei s,
+      x$ksled d 
+where    
+      s.indx = d.indx
+order by
+      d.indx
+;
+
+type w_type is table of c_system_event%rowtype index by binary_integer;
+w_list w_type;

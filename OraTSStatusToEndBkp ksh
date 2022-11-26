@@ -1,0 +1,81 @@
+#!/usr/bin/ksh
+#
+##  User qui lance :   ora<sid>
+##  Exemple d'utilisateur pour l'instances: 
+##  - DL4 (oradl4)
+##  - CM6 (oracm6)
+##  - WP1 (orawp1), etc...
+##  $0 : Verifie si un tablespace est en BEGIN BACKUP et si oui,
+##       il genere dynamiquement un script SQL correspondant aux commandes ALTER TABLESPACE xxx END BACKUP
+##       et il executent ce script pour remmettre les tablespaces en END BACKUP
+##
+#
+
+set -x
+
+typeset -i i=10
+VraiOuFaux=$(ps -ef|grep -e "brb"|grep -e `id -unr`|grep -v -c grep)
+while [[ ($VraiOuFaux != 0) && ($i != 0) ]]
+do
+sleep 1800
+i=$i-1
+done
+
+VraiOuFaux=$(ps -ef|grep -e "brb"|grep -e `id -unr`|grep -v -c grep)
+if [[ ($VraiOuFaux != 0) && ($i != 0) ]]
+then
+  echo "Backup toujours en cours, merci de verifier l etat de la sauvegarde"
+  exit -1
+fi
+
+
+#
+## Generation du script
+#
+#
+# On regarde si il y a des tablespaces en BEGIN BACKUP, le block PLSQL returne 1 si oui, 0 sinon
+#
+sqlplus -s / << EOF
+set feedback off pagesize 0 heading off verify off linesize 100 trimspool on
+var retcode number
+begin
+  :retcode:=0;
+  for rec in (select t.name as "tb_name", d.file# as "df#", d.name as "df_name", b.status from v\$datafile d, v\$tablespace t, v\$backup b where d.ts#=t.ts# and b.file#=d.file# and b.status='ACTIVE') loop
+    :retcode:=1;
+    exit;
+  end loop;
+end;
+/
+exit :retcode
+EOF
+
+
+#
+# Si le code de retour est 1 alors il y a des tablespaces en BEGIN BACKUP, donc on genere un script SQL qui fait ALTER TABLEPSACE xxx END BACKUP et on l execute
+if [[ $? == 1 ]]
+then
+
+sqlplus -s / << EOF
+set feedback off pagesize 0 heading off verify off linesize 100 trimspool on
+whenever sqlerror exit failure
+whenever oserror exit failure
+prompt Status of v\$backup with datafiles in ACTIVE backup
+select * from  v\$backup ;
+SPOOL SetToEndBkp.sql
+PROMPT spool SetToEndBkp.log  ;
+PROMPT select to_char(sysdate, 'dd/mm/yyyy hh24:mi:ss') as "DATE" from dual;;
+select distinct 'alter tablespace ' || t.name || ' end backup;' from v\$datafile d, v\$tablespace t, v\$backup b where d.ts#=t.ts# and b.file#=d.file# and b.status='ACTIVE';
+PROMPT spool off ;;
+SPOOL off;
+start SetToEndBkp.sql
+host rm -f SetToEndBkp.sql
+PROMPT Normally no tablespace should be in BEGIN BACKUP, donc no backup should be ACTIVE
+select * from  v\$backup ;
+exit success
+EOF
+
+fi 
+
+exit
+
+

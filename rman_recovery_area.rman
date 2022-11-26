@@ -1,0 +1,4 @@
+run {
+allocate channel dev1 type sbt parms='SBT_LIBRARY=oracle.disksbt, ENV=(BACKUP_DIR=/backup)';
+backup recovery area;
+}

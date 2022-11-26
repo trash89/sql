@@ -1,0 +1,19 @@
+--
+--    Script:     loop_sys.dec
+--    Author:     J P Lewis
+--    Dated:      22-Jan-1999
+--    Purpose:    Declarations for procedure system_stats
+--
+
+cursor c_system_stat is
+      select
+            statistic#,
+            name,
+            value
+      from
+            v$sysstat
+      order by
+            statistic#;
+
+type s_type is table of c_system_stat%rowtype index by binary_integer;
+s_list s_type;
