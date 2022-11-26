@@ -2,7 +2,7 @@
 --  Script    : t.sql
 --  Author    : Marius RAICU
 --  Purpose   : show tablespace informations
---  Tested on : Oracle 8i,9i
+--  Tested on : Oracle 8i,9i,10g,12c,19c
 
 set feed off flush off verify off trimout on trimspool on
 col tablespace_name   heading TablespaceName  format a30
@@ -41,26 +41,23 @@ set lines 500 pages 200
 
 col tablespace_name for a30 head 'TablespaceName'
 col block_size for 9999 head 'Block'
-col initial_extent format 999999999 head 'Ini'
-col next_extent format 999999999 head 'Next'
-col min_extents format 999999999 head 'Min_Ext'
-col max_extents format 9999999999 head 'Max_Ext'
+col ini_next format a15 head 'Ini/Next'
 col pct_increase format 99 head '%Incr'
 col MIN_EXTLEN for 99999999 head 'MinExtLen'
 col status for a9 head 'Status'
 col contents for a9 head 'Contents'
-col logging for a9 head 'Logging'
-col force_logging for a3 head 'Force'
-col extent_management for a10 head 'ExtMgmt'
+col logging for a9 head 'Logging?'
+col force_logging for a6 head 'Force?'
+col extent_management for a7 head 'ExtMgmt'
 col allocation_type for a9 head 'AllocType'
 col plugged_in for a3 head 'Plug'
 col segment_space_management for a6 head 'SegmSpcMgmt'
 col def_tab_compression for a8 head 'DefTabCompr'
 col retention for a11 head 'Retention'
-col bigfile for a3 head 'Big'
+col bigfile for a5 head 'BigF?'
 
-select tablespace_name,to_char(round(initial_extent/1024))||'/'||to_char(round(next_extent/1024)) as ini_next,min_extents,max_extents,pct_increase,
-       status,substr(contents,1,4) as contents,substr(logging,1,5) as logg,substr(extent_management,1,5) as Ext_Man,substr(allocation_type,1,4) as alloc 
+select tablespace_name,to_char(round(initial_extent/1024))||'/'||to_char(round(next_extent/1024)) as ini_next,pct_increase,
+       status,contents,logging,force_logging,extent_management,allocation_type as alloc,bigfile,retention
 from dba_tablespaces;
 
 --select * from dba_tablespaces;

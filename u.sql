@@ -1,5 +1,6 @@
 --
---
+--  Show connected users
+--  Tested on 19c
 --
 -------------------------------------------------------------
 @save_sqlplus_settings
