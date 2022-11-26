@@ -2,7 +2,7 @@
 --  Script    : f.sql
 --  Author    : Marius RAICU
 --  Purpose   : show datafile informations
---  Tested on : Oracle 12c, 19c, 21c
+--  Tested on : Oracle 8i, 9i, 10g
 
 set lines 160 pages 200 trimspool on trimout on feed off head on
 clear computes
@@ -20,13 +20,13 @@ break on report
 compute sum of meg on report
 
 select file_id,tablespace_name,bigfile,flashback_on,INCLUDED_IN_DATABASE_BACKUP,file_name,status,autoextensible,increment_by,bytes/1048576 meg
-from dba_data_files,v$tablespace where dba_data_files.TABLESPACE_NAME = V$TABLESPACE.NAME and sys_context('USERENV','CON_ID')=v$tablespace.con_id  order by tablespace_name;
+from dba_data_files,v$tablespace where dba_data_files.TABLESPACE_NAME = V$TABLESPACE.NAME order by tablespace_name;
 
 clear computes
 compute sum of meg on report
 
 select file_id,tablespace_name,bigfile,flashback_on,INCLUDED_IN_DATABASE_BACKUP,file_name,status,autoextensible,increment_by,bytes/1048576 meg
-from dba_temp_files,v$tablespace where dba_temp_files.TABLESPACE_NAME = V$TABLESPACE.NAME and sys_context('USERENV','CON_ID')=v$tablespace.con_id
+from dba_temp_files,v$tablespace where dba_temp_files.TABLESPACE_NAME = V$TABLESPACE.NAME 
 order by tablespace_name;
 
 clear columns
