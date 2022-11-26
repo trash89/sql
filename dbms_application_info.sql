@@ -51,16 +51,16 @@ create or replace package body dbms_application_info as
 
   procedure set_module(module_name in varchar2,action_name in varchar2) is
   begin
-    if action_name = ’Enter’ then
+    if action_name = 'Enter' then
       g_level := g_level+1;
       if g_level > g_module.last then
         g_module.extend;
       end if;
       g_module(g_level) := module_name;
-      sys.dbms_application_info.set_module(module_name,’Called by ’||g_module(g_level-1));
-    elsif action_name = ’Exit’ then
+      sys.dbms_application_info.set_module(module_name,ï¿½Called by ï¿½||g_module(g_level-1));
+    elsif action_name = ï¿½Exitï¿½ then
       g_level := g_level-1;
-      sys.dbms_application_info.set_module(g_module(g_level),’Returned from ’||module_name);
+      sys.dbms_application_info.set_module(g_module(g_level),ï¿½Returned from ï¿½||module_name);
     else
       sys.dbms_application_info.set_module(module_name,action_name);
     end if;
