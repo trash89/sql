@@ -1,7 +1,7 @@
 set feedback off;
 set feedback off;
 set lines 200 pages 0;
-define _editor=gvim;
+define _editor=vi;
 set sqlprompt "&_user@&_CONNECT_IDENTIFIER> ";
 alter session set NLS_LANGUAGE='AMERICAN' NLS_TERRITORY='AMERICA';
 alter session set NLS_CURRENCY='$' NLS_ISO_CURRENCY='AMERICA' NLS_NUMERIC_CHARACTERS='.,';
