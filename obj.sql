@@ -1,6 +1,7 @@
 set lines 200 pages 22 trims off trim on
 
 col obj format a39 head 'Object Name'
+col subobj format a39 head 'SubObject Name'
 col object_type for a22 head 'Object Type'
 col object_id for 9999999 head 'Obj ID'
 col temporary for a4 head 'Temp'
@@ -9,6 +10,7 @@ col secondary for a3 head 'Sec'
 
 select 
    object_name as obj,
+   subobject_name as subobj,
    object_type,
    created,
    last_ddl_time,
@@ -18,7 +20,7 @@ select
    generated,
    secondary 
 from user_objects
-where object_type not like '%PARTITION%'
+--where object_type not like '%PARTITION%'
 order by 
   object_type,
   object_name;

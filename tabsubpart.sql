@@ -1,7 +1,7 @@
 --
---  Script    : tab.sql
+--  Script    : tabsubpart.sql
 --  Author    : Marius RAICU
---  Purpose   : show tables in the current schema from user_tables
+--  Purpose   : show table subpartions for a table from user_tab_partitions
 --  Tested on : Oracle 19c
 
 @save_sqlplus_settings
@@ -9,48 +9,49 @@
 set lines 200 pages 22 trims off trim on
 undef tab
 undef tbs
+undef prt
 accept tbs char prompt 'Tablespace?(%) :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
+accept prt char prompt 'Partition?(%)  :' default ''
 column tablespace_name format a20 head 'Tablespace'
-column tab format a39 head 'Table'
-col logging for a4 head 'Log?'
-col partitioned for a5 head 'Part?'
-col row_mov for a7 head 'RowMov?'
-col monitoring for a5 head 'Moni?'
+column part format a55 head 'PartPos SubPPos  Table     Partition      Subpartition'
+
+
+col logging for a4 head 'Log'
 column pct_free_used format a6 head '%f/%us'
+column ininext format a10 head 'KIni/Next'
 column ini_max format a10 head 'Ini/Max/Fl'
 column num_rows format 99999999 head 'NrRows'
+column lasta format a10 head 'LastAnl'
 column blo format a13 head 'Blk/Empty'
-column degrI format a7 head 'Paral'
-column part format a13 head 'Cached/Tmp/Nes'
 column splen format a10 head 'AvgSp/Row'
 column chain_cnt format 99999 head 'ChCnt'
-column avg_row_len format 999999 head 'AvgRow'
-column lasta format a10 head 'LastAnl'
-column ininext format a10 head 'KIni/Next'
+
+col compr for a6 head 'Compr?'
+col rest for a9 head 'Interv/RO'
+
 select 
    tablespace_name,
-   table_name as tab,
-   logging,
-   partitioned,
-   substr(row_movement,1,5) as row_mov,
-   monitoring,
-   trim(degree)||'/'||trim(instances) as degrI,
+   to_char(partition_position,'999')||' '||to_char(subpartition_position,'999')||' '||table_name||' '||partition_name||' '||subpartition_name as part,
+   logging,   
+   chain_cnt,
+   substr(trim(compression),1,3) as compr,
    num_rows,
    to_char(last_analyzed,'dd/mm/rrrr') as lasta,   
-   chain_cnt,
-   trim(cache)||'/'||trim(temporary)||'/'||trim(nested) as part,
    to_char(blocks)||'/'||to_char(empty_blocks) as blo,
    to_char(avg_space)||'/'||to_char(avg_row_len) as splen,
    to_char(ini_trans)||'/'||to_char(max_trans)||'/'||to_char(freelists) as ini_max,
    to_char(initial_extent/1024)||'/'||to_char(next_extent/1024) as ininext,
-   to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used
-from user_tables 
+   to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used,
+   interval||'/'||read_only rest
+from user_tab_subpartitions 
 where 
-     table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
-order by num_rows,table_name ;
+   table_name like upper('%&&tab%') and partition_name like upper('%&&prt%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
+order by 
+   table_name,partition_position,subpartition_position ;
 undef tab
 undef tbs
+undef prt
 
 @restore_sqlplus_settings
 
