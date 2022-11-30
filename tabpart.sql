@@ -1,16 +1,19 @@
 --
 --  Script    : tabpart.sql
 --  Author    : Marius RAICU
---  Purpose   : show table partions for a table from user_tab_partitions
+--  Purpose   : show table partions for a table from all_tab_partitions
 --  Tested on : Oracle 19c
 
 @save_sqlplus_settings
 
-set lines 200 pages 22 trims off trim on
+set lines 212 pages 22 trims off trim on
 undef tab
 undef tbs
+undef own
+accept own char prompt 'Owner?(%)      :' default ''
 accept tbs char prompt 'Tablespace?(%) :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
+col owner for a15 head 'Owner'
 column tablespace_name format a20 head 'Tablespace'
 column part format a40 head 'Pos Table     Partition'
 col composite for a6 head 'Compos'
@@ -29,6 +32,7 @@ col compr for a6 head 'Compr?'
 col rest for a14 head 'Nest/Interv/RO'
 
 select 
+   table_owner as owner,
    tablespace_name,
    to_char(partition_position,'999')||' '||table_name||' '||partition_name as part,
    composite, 
@@ -45,13 +49,14 @@ select
    to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used,
    is_nested||'/'||interval||'/'||read_only rest
 from 
-   user_tab_partitions 
+   all_tab_partitions 
 where 
-   table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
+   table_owner like upper('%&&own%') and table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
 order by 
-   table_name,partition_position ;
+   table_owner,table_name,partition_position ;
 undef tab
 undef tbs
+undef own
 
 @restore_sqlplus_settings
 

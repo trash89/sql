@@ -1,7 +1,7 @@
 --
 --  Script    : tab.sql
 --  Author    : Marius RAICU
---  Purpose   : show tables in the current schema from user_tables
+--  Purpose   : show tables from all_tables
 --  Tested on : Oracle 19c
 
 @save_sqlplus_settings
@@ -49,10 +49,12 @@ select
    to_char(ini_trans)||'/'||to_char(max_trans)||'/'||to_char(freelists) as ini_max,
    to_char(initial_extent/1024)||'/'||to_char(next_extent/1024) as ininext,
    to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used
-from all_tables 
+from 
+   all_tables 
 where 
-     owner like upper('%&&own%') and table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
-order by owner,num_rows,table_name ;
+   owner like upper('%&&own%') and table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
+order by 
+   owner,num_rows,table_name ;
 undef tab
 undef tbs
 undef own

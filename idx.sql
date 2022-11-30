@@ -6,12 +6,15 @@
 
 @save_sqlplus_settings
 
-set lines 206 pages 22 trims off trim on
+set lines 223 pages 22 trims off trim on
 undef tab
 undef tbs
+undef own
+accept own char prompt 'Owner?(%)      :' default ''
 accept tbs char prompt 'Tablespace?(%) :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
 accept idx char prompt 'Index?(%)      :' default ''
+col owner for a15 head 'Owner'
 column tablespace_name format a15 head 'Tablespace'
 column tab format a15 head 'Table'
 column idx format a15 head 'Index'
@@ -34,6 +37,7 @@ column ininext format a10 head 'KIni/Next'
 column pct_free_used format a6 head '%f/%us'
 
 select 
+   owner,
    tablespace_name,
    table_name as tab, 
    index_name as idx, 
@@ -53,32 +57,13 @@ select
    to_char(ini_trans)||'/'||to_char(max_trans)||'/'||to_char(freelists) as ini_max,
    to_char(initial_extent/1024)||'/'||to_char(next_extent/1024) as ininext,
    to_char(pct_free)||'/'||to_char(pct_increase)||'/'||to_char(pct_threshold) as pct_free_used
-from user_indexes
+from all_indexes
 where 
-     table_name like upper('%&&tab%') and index_name like upper('%&&idx%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
+     owner like upper('%&&own%') and table_name like upper('%&&tab%') and index_name like upper('%&&idx%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
 order by num_rows,table_name ;
 undef tab
 undef tbs
-
+undef own
 @restore_sqlplus_settings
 
-prompt ---------------- To obtain the DDL for a table or index, execute the following: ---------------------------------------;
-prompt SET LONG 20000000;
-prompt SET PAGESIZE 0;
-
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'PRETTY',true);;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SQLTERMINATOR',true);;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'STORAGE',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'TABLESPACE',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'REF_CONSTRAINTS',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS_AS_ALTER',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SIZE_BYTE_KEYWORD',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'INDEX');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'CONSTRAINTS');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'INHERIT',true);;
-
-prompt select dbms_metadata.get_ddl('INDEX','IDX_TEST') from dual;;
-prompt select dbms_metadata.get_ddl('TABLE','TEST') from dual;;
-prompt ----------------------------------------------------------------------------------------------------------------------;
+--@@show_meta

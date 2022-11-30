@@ -1,22 +1,26 @@
 --
 --  Script    : idxcol.sql
 --  Author    : Marius RAICU
---  Purpose   : show index columns for a specific index
+--  Purpose   : show index columns for a specific index from all_ind_columns
 --  Tested on : Oracle 19c
 
 @save_sqlplus_settings
 
-set lines 206 pages 22 trims off trim on
+set lines 206 pages 200 trims off trim on
 undef tab
 undef idx
+undef own
+accept own char prompt 'Owner?(%)      :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
 accept idx char prompt 'Index?(%)      :' default ''
+col owner for a15 head 'Owner'
 column tab format a15 head 'Table'
 column idx format a15 head 'Index'
 column col_name format a20 head 'ColName'
 column col_position format 999999999 head 'ColPos'
 
 select 
+   index_owner as owner,
    table_name as tab, 
    index_name as idx, 
    column_name as col_name,
@@ -24,32 +28,15 @@ select
    column_length,
    char_length,
    descend
-from user_ind_columns
+from all_ind_columns
 where 
-     table_name like upper('%&&tab%') and index_name like upper('%&&idx%')
-order by table_name,index_name,column_position ;
+   index_owner like upper('%&&own%') and table_name like upper('%&&tab%') and index_name like upper('%&&idx%')
+order by 
+   index_owner,table_name,index_name,column_position ;
 undef tab
 undef idx
+undef own
 
 @restore_sqlplus_settings
 
-prompt ---------------- To obtain the DDL for a table or index, execute the following: ---------------------------------------;
-prompt SET LONG 20000000;
-prompt SET PAGESIZE 0;
-
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'PRETTY',true);;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SQLTERMINATOR',true);;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'STORAGE',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'TABLESPACE',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'REF_CONSTRAINTS',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS_AS_ALTER',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SIZE_BYTE_KEYWORD',true,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'TABLE');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'INDEX');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',false,'CONSTRAINTS');;
-prompt execute dbms_metadata.set_transform_param(dbms_metadata.session_transform,'INHERIT',true);;
-
-prompt select dbms_metadata.get_ddl('INDEX','IDX_TEST') from dual;;
-prompt select dbms_metadata.get_ddl('TABLE','TEST') from dual;;
-prompt ----------------------------------------------------------------------------------------------------------------------;
+--@@show_meta
