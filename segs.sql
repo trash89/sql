@@ -13,13 +13,15 @@ break on report
 accept tbs char prompt "In which Tablespace? :"
 col segment_type for a20
 col segment_name format a38
-col bytesM for 999999.999999 head 'Mb'
+col bytesM for 999999.999999 head 'Size(Mb)'
 select 
-  segment_type,segment_name,bytes/1024/1024 as bytesM,blocks,extents 
+  segment_type,segment_name,count(*) as num_extents,sum(bytes/1024/1024) as bytesM
 from 
   user_segments
 where 
   tablespace_name like upper('%&&tbs%') 
+group by 
+  segment_type,segment_name
 order by 
   segment_type,segment_name;
 undef tbs
