@@ -56,7 +56,7 @@ col time_waited_min for 99999.99      head 'TimeW|(Min)'
 col time_pct        for 990.00        head "% Time|Waited"
 col cnt_pct         for 990.00        head "% Waits"
 col average_wait    for 99999999      head 'Average|Wait(CSec)'
-col event           for a47           head 'Event Name'
+col event           for a56           head 'Event Name'
 col diff_timeM      for 99999999.99   head 'Diff Time(Min)'
 col diff_timeS      for 99999999.99   head 'Diff Time(CSec)'
 col sid             for 999999
@@ -133,12 +133,16 @@ where time_waited!=0 and
 order by nvl(inst_id,1),time_waited;
 
 clear breaks
-prompt File statistics (GV$FILESTAT+GV$TEMPSTAT)
+prompt File statistics (GV$FILESTAT)
 col file#    for 999    head 'F#'
 col maxiortm for 999999 head 'MaxRtm'
 col maxiowtm for 999999 head 'MaxWtm'
 select nvl(inst_id,1) as inst_id,file#,phyrds,phyblkrd,readtim,maxiortm,phywrts,phyblkwrt,writetim,maxiowtm from gv$filestat order by nvl(inst_id,1);
+prompt Temp File statistics (GV$TEMPSTAT)
 select nvl(inst_id,1) as inst_id,file#,phyrds,phyblkrd,readtim,maxiortm,phywrts,phyblkwrt,writetim,maxiowtm from gv$tempstat order by nvl(inst_id,1);
+
+
+@@f.sql
 
 prompt
 
@@ -154,6 +158,7 @@ from gv$instance;
 clear columns
 clear breaks
 set lines 150 pages 22 feed on head on
+
 spool off
 
 @restore_sqlplus_settings

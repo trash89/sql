@@ -57,7 +57,7 @@ set verify off
 def osm_prog	= 'swpct.sql'
 def osm_title	= 'System Event Activity By PERCENT'
 
-start osmtitle
+--start osmtitle
 
 col event	format a35	heading "Wait Event" trunc
 col tw	 	format 99999990	heading "Time Waited|(min)"
@@ -101,5 +101,5 @@ where  event like '&filter%'
 order by time_pct desc, cnt_pct desc, event asc
 /
 
-start osmclear
+--start osmclear
 

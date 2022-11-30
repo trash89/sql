@@ -6,11 +6,14 @@
 
 @save_sqlplus_settings
 
-set lines 200 pages 22 trims off trim on
+set lines 206 pages 22 trims off trim on
 undef tab
 undef tbs
+undef own
+accept own char prompt 'Owner?(%)      :' default ''
 accept tbs char prompt 'Tablespace?(%) :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
+col owner for a15 head 'Owner'
 column tablespace_name format a20 head 'Tablespace'
 column tab format a39 head 'Table'
 col logging for a4 head 'Log?'
@@ -29,6 +32,7 @@ column avg_row_len format 999999 head 'AvgRow'
 column lasta format a10 head 'LastAnl'
 column ininext format a10 head 'KIni/Next'
 select 
+   owner,
    tablespace_name,
    table_name as tab,
    logging,
@@ -45,20 +49,14 @@ select
    to_char(ini_trans)||'/'||to_char(max_trans)||'/'||to_char(freelists) as ini_max,
    to_char(initial_extent/1024)||'/'||to_char(next_extent/1024) as ininext,
    to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used
-from user_tables 
+from all_tables 
 where 
-     table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
-order by num_rows,table_name ;
+     owner like upper('%&&own%') and table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
+order by owner,num_rows,table_name ;
 undef tab
 undef tbs
+undef own
 
 @restore_sqlplus_settings
 
-prompt To obtain the DDL for a table or index, execute the following:
-prompt SET LONG 20000000
-prompt SET PAGESIZE 0
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'STORAGE',false);;
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'SEGMENT_ATTRIBUTES',false);;
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'TABLESPACE',false);;
-prompt select dbms_metadata.get_ddl('INDEX','IDX_TEST') from dual;;
-prompt select dbms_metadata.get_ddl('TABLE','TEST') from dual;;
+--@@show_meta

@@ -9,6 +9,7 @@ col generated for a3 head 'Gen'
 col secondary for a3 head 'Sec'
 
 select 
+   owner,
    object_name as obj,
    subobject_name as subobj,
    object_type,
@@ -19,9 +20,10 @@ select
    temporary,
    generated,
    secondary 
-from user_objects
+from all_objects
 --where object_type not like '%PARTITION%'
 order by 
+  owner,
   object_type,
   object_name;
 

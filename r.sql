@@ -8,13 +8,13 @@
 ------------------------------------------------------------------------
 @save_sqlplus_settings
 
-set lines 130 pages 200 trims off trim on feed off
+set lines 200 pages 200 trims off trim on feed off
 col extents       for 9999 head 'Exts'
 col swe           for a15 head 'ShWrEx'
 col RSize         for 99999.99 head 'RSize(M)'
 col HWMSize       for 99999.99 head 'HWM(M)'
-col Ini_Next      for a13 head 'IniNextEXT(M)'
-col segment_name  for a15
+col Ini_Next      for a14 head 'IniNextEXT(M)'
+col segment_name  for a30
 col username      for a10
 col Tx            for 99
 col machine       for a25
@@ -24,7 +24,7 @@ col status        for a10
 col min_max       for a10 head 'MinMax Ex'
 col OptSize       for 99999 head 'Opt(M)'
 col extends       for 9999 head 'Extends'
-col instance_num  for a1 head 'I'
+col instance_num  for a2 head 'I'
 select 
     d.segment_name,
     d.owner,

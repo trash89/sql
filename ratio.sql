@@ -41,7 +41,7 @@ end;
 /
 set termout on
 
-@system_times
+--@system_times
 
 set head off feed off
 select 'BufHitRatio(>95%) = '||to_char((1-(:pr/(:dbbg+:cg)))*100,'999.99') valoare  from dual;

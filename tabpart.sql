@@ -44,7 +44,8 @@ select
    to_char(initial_extent/1024)||'/'||to_char(next_extent/1024) as ininext,
    to_char(pct_free)||'/'||to_char(pct_used) as pct_free_used,
    is_nested||'/'||interval||'/'||read_only rest
-from user_tab_partitions 
+from 
+   user_tab_partitions 
 where 
    table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
 order by 
@@ -54,11 +55,4 @@ undef tbs
 
 @restore_sqlplus_settings
 
-prompt To obtain the DDL for a table or index, execute the following:
-prompt SET LONG 20000000
-prompt SET PAGESIZE 0
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'STORAGE',false);;
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'SEGMENT_ATTRIBUTES',false);;
-prompt EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'TABLESPACE',false);;
-prompt select dbms_metadata.get_ddl('INDEX','IDX_TEST') from dual;;
-prompt select dbms_metadata.get_ddl('TABLE','TEST') from dual;;
+--@@show_meta
