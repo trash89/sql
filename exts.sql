@@ -1,17 +1,31 @@
+--
+--  Script    : exts.sql
+--  Author    : Marius RAICU
+--  Purpose   : show extents from user_extents
+--  Tested on : Oracle 19c
 
 @save_sqlplus_settings
 
-set lines 110 pages 80 trims on trim on
-column tablespace_name format a15
-column segment_type format a15
-column seg format a45
-select /*+ rule */ tablespace_name,segment_type,owner||'.'||segment_name seg,count(*) from dba_extents
-where owner not in ('SYS','SYSTEM')
-group by tablespace_name,segment_type,segment_name,owner
-order by count(*);
-
-set lines 80 pages 22
-clear columns
+set lines 200 pages 200 trims off trim on
+undef tbs
+compute sum of bytesM label 'Total(Mb)' on report
+break on report
+accept tbs char prompt "In which Tablespace? :"
+col segment_type for a20
+col segment_name format a38
+col bytesM for 999999.999999 head 'Size(Mb)'
+select 
+  tablespace_name,segment_type,segment_name,count(*) as num_extents,sum(bytes/1024/1024) as bytesM
+from 
+  user_extents
+where 
+  tablespace_name like upper('%&&tbs%') 
+group by 
+  tablespace_name,segment_type,segment_name
+order by 
+  tablespace_name,segment_type,segment_name;
+undef tbs
 
 @restore_sqlplus_settings
 
+--@@show_meta
