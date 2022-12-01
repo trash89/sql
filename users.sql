@@ -11,7 +11,12 @@ column created head 'Created'
 column profile format a10 head 'Profile'
 column initial_rsrc_consumer_group format a10 head 'IniRSRCConsGR'
 column external_name format a10 head 'ExtName'
-select username,user_id,account_status,default_tablespace,temporary_tablespace,to_char(created,'dd/mm/yyyy hh24:mi:ss') as created from dba_users order by username;
+select 
+    username,user_id,account_status,default_tablespace,temporary_tablespace,to_char(created,'dd/mm/yyyy hh24:mi:ss') as created 
+from 
+    dba_users 
+order by 
+    username;
 clear columns
 set lines 80 pages 22
 
