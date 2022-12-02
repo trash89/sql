@@ -13,17 +13,18 @@ break on report
 accept tbs char prompt "In which Tablespace? :"
 col segment_type for a20
 col segment_name format a38
+col partition_name format a20
 col bytesM for 999999.999999 head 'Size(Mb)'
 select 
-  tablespace_name,segment_type,segment_name,count(*) as num_extents,sum(bytes/1024/1024) as bytesM
+  tablespace_name,segment_type,segment_name,partition_name,count(*) as num_extents,sum(bytes/1024/1024) as bytesM
 from 
   user_extents
 where 
   tablespace_name like upper('%&&tbs%') 
 group by 
-  tablespace_name,segment_type,segment_name
+  tablespace_name,segment_type,segment_name,partition_name
 order by 
-  tablespace_name,segment_type,segment_name;
+  tablespace_name,segment_type,segment_name,partition_name;
 undef tbs
 
 @restore_sqlplus_settings
