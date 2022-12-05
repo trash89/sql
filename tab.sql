@@ -6,14 +6,17 @@
 
 @save_sqlplus_settings
 
-set lines 206 pages 22 trims off trim on
+set lines 211 pages 22 trims off trim on
 undef tab
 undef tbs
 undef own
 accept own char prompt 'Owner?(%)      :' default ''
 accept tbs char prompt 'Tablespace?(%) :' default ''
 accept tab char prompt 'Table?(%)      :' default ''
-col owner for a15 head 'Owner'
+col owner for a20 head 'Owner'
+col table_owner for a20 head 'TableOwner'
+column trigger_name format a39 head 'Trigger Name'
+column trigger_type format a15 head 'Trigger Type'
 column tablespace_name format a20 head 'Tablespace'
 column tab format a39 head 'Table'
 col logging for a4 head 'Log?'
@@ -55,6 +58,20 @@ where
    owner like upper('%&&own%') and table_name like upper('%&&tab%') and (tablespace_name like upper('%&&tbs%') or tablespace_name is null)
 order by 
    owner,num_rows,table_name ;
+
+prompt Triggers:
+select 
+  owner,
+  table_owner,
+  table_name as tab,
+  trigger_name,
+  trigger_type
+from
+   all_triggers
+where 
+   table_owner like upper('%&&own%') and table_name like upper('%&&tab%')
+order by 
+   table_owner,table_name,trigger_type ;
 undef tab
 undef tbs
 undef own
