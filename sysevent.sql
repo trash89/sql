@@ -37,14 +37,13 @@ col total_waits format 999,990.00 heading "Total|Waits|(in 1000s)"
 col total_timeouts format 999,990.00 heading "Total|Timeouts|(in 1000s)"
 col time_waited format 999,990.00 heading "Time|Waited|(in Hours)"
 col pct_significant format 90.00 heading "% of|Concern"
-col average_wait format 990.00 heading "Avg|Wait|(Secs)"
+col average_wait format 999999990.00 heading "Avg|Wait|(Secs)"
 
 col instance new_value V_INSTANCE noprint
 select	lower(replace(t.instance,chr(0),'')) instance
-from	sys.v_$thread        t,
-	sys.v_$parameter     p
-where	p.name = 'thread'
-and	t.thread# = to_number(decode(p.value,'0','1',p.value));
+from	sys.v_$thread t
+where t."THREAD#" in (select to_number(decode(trim(p.value),'0','1',p.value)) from sys.v_$parameter p where p.name = 'thread');
+
 
 col total_time_waited new_value V_TOTAL_TIME_WAITED noprint
 select	sum(time_waited) total_time_waited

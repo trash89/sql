@@ -17,7 +17,7 @@ where wait_time!=0
 --      event not like '%message%' and
 --      event not like '%pipe get%' and
 --      event not like '%wakeup%' and
---      event not like '%Null%'   
+--      event not like '%Null%'
 order by wait_time;
 clear columns
 set lines 150 pages 22 feed on head on

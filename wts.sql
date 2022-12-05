@@ -23,10 +23,8 @@ col name format a15 word_wrap heading "OBJECT NAME"
 col sql_text format a25 word_wrap
 col instance new_value V_INSTANCE noprint
 select	lower(replace(t.instance,chr(0),'')) instance
-from	sys.v_$thread t,
-	sys.v_$parameter p
-where	p.name = 'thread'
-and	t.thread# = to_number(decode(trim(p.value),'0','1',p.value));
+from	sys.v_$thread t
+where t."THREAD#" in (select to_number(decode(trim(p.value),'0','1',p.value)) from sys.v_$parameter p where p.name = 'thread');
 
 select /*+ rule */
 	w.sid,
