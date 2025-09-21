@@ -1,0 +1,107 @@
+# Oracle SQL scripts for database administration
+
+- mylogin.sql - set the SQL*Plus prompt with server name, database name etc (automatically loaded when connecting)
+
+### database configuration
+- init.sql, init10.sql initall.sql, initu.sql - show database parameters
+- f.sql,f10.sql, f_all.sql - datafiles information
+- t.sql, t10.sql - tablespaces information
+- logfile.sql - redo log files and standby redo logs
+- users.sql, users10.sql, users11.sql - show users FROM dba_users
+- dir.sql - directories configuration
+- jobs.sql - show scheduled and running jobs
+- tab.sql - show tables 
+- tabpart.sql - show partitioned tables 
+- tabcol.sql - show columns in tables
+- tabhisto.sql - show table histograms
+- seq.sql - show sequences FROM dba_sequences
+- constr.sql - show constraints from dba_constraints
+- constr_not_valid.sql - show constraints FROM dba_constraints where (status != 'ENABLED' or validated !='VALIDATED')
+- datatypes.sql - show data types from dba_tab_columns
+- bigsegs.sql - Show big segments in a database
+- matv.sql, matvl.sql - show materialized views and materialized view logs
+- iot.sql - show IOTs
+- trig.sql - show triggers
+- idx.sql - show indexes
+- idxpart.sql - show indexes partitions
+- idxcol.sql - show index columns
+- objs.sql - show objects
+- segs.sql - show segments
+- lobs.sql - show lobs info
+- aud.sql - show info FROM dba_audit_trail
+- sysaux.sql, sysaux10.sql - show tablespace sysaux occupants
+- fra.sql - show flash recovery area usage
+- roles.sql, roles10.sql - show roles
+- names.sql - show the different names of the database/instance
+- ps.sql, ps10.sql - show processes and their trace files
+- nls.sql - show nls info
+- db_info.sql, db_info121.sql, db_info11.sql, db_info10.sql - more informations about the database
+- dg_info.sql - data guard configuration
+- dg_gap.sql - show standby database gap
+- ldg_prep.sql - show the schemas,tables and columns potentially not supported for logical standby
+- show_dbfiles.sql, show_dbfiles10.sql, show_dbfiles11.sql - show all files and folders for a database
+- show_flb.sql - show flashback info
+- show_pdb.sql - show pdb info (for 12c+)
+- show_prof.sql - show profiles FROM dba_profiles
+- show_rp.sql - show restore points
+- show_rman.sql - show rman backups
+- show_awr.sql - AWR info
+- show_tde.sql, show_tde10.sql, show_tde19.sql - show encrypted columns FROM dba_encrypted_columns, also v$encryption_wallet and v$encryption_keys
+- get_index.sql, get_seq.sql, get_table.sql, get_user.sql, get_role.sql, get_view.sql, get_matv.sql - use dbms_metadata to extract definitions
+- idx_fk.sql - check if FKs have indexes on it
+- idx_frag.sql, idx_frag2.sql - deal with index fragmentation
+- services.sql,services10.sql - show services
+- reg.sql - show options FROM dba_registry
+- options.sql - show options FROM v$options
+- dbl.sql - show database links FROM dba_db_links
+- syn.sql - show synonyms FROM dba_synonyms
+
+### database activity and tuning
+- u.sql, u10.sql - connected users
+- bgp.sql - show background processes
+- r.sql, r10.sql - rollback segments activity, transactions
+- l.sql, l10.sql - locks
+- swtx.sql, swtx10.sql - sessions waiting in transactions
+- sw.sql, sw10.sql - session waits
+- tseg.sql, tseg10.sql - temp segments activity
+- url.sql, url10.sql - call u r l tseg swtx scripts
+- sess_res.sql, sess_res10.sql - sessions ressources
+- logsw.sql - show redo log switches
+- hb.sql - show hot blocks
+- dl.sql - DDL and DML locks
+- dp_jobs.sql - data pump jobs
+- tops.sql - top 10 sessions
+- cursor_params.sql, cursor_params10.sql - cursor parameters
+- awr_snap.sql - generate AWR report FROM snapshots
+- nopa.sql - generate ALTER TABLE/INDEX NOPARALLEL; to run after un REBUILD/MOVE with parallel
+- setlogging.sql - generate ALTER TABLE/INDEX LOGGING; to run after un REBUILD/MOVE with nologging
+- resum.sql - show suspended operations FROM dba_resumable
+- db_cache_adv.sql  - show db cache advice
+- ratio.sql - show divers ratios
+- sql_adv.sql - launch an SQL Access Advisor
+- sql_autot.sql - launch an sql_auto_tune session
+- sql_tune.sql - launch dbms_sqltune session
+- sqlarea.sql - show queries and stats FROM v$sqlarea
+- set_trace.sql - create a procedure to set a trace in a session
+- audit.sql - create an after logon trigger to set a trace for new sessions
+- txs.sql - transactions per second
+- gather_db_stats.sql - gather all database statistics
+- gather_schema_stats.sql - gather schema statistics
+- gather_table_stats.sql - gather table statistics
+- ash.sql, ash10.sql - show active session history
+- lsql.sql - generate target.sql file containing the sql statement executed by a session
+- lsqlid.sql - generate target.sql file containing the sql statement executed by a session by SQL ID
+- explain10g.sql - show explain plan for a target.sql statement
+- xpl.sql - show the plan of an SQL ID
+- arch.sql - show archived logs by hour
+- moni_rman.sql - monitor a rman operation
+- getcount.sql - show the row number from tables in dba_tables at the latest scn
+- getscn.sql - determine the instantiation scn of the database (for goldengate)
+
+## Divers
+- alert_log.sql, alert_log10.sql - load the alert log into a table
+- plan_table.sql - create the plan table
+- build_scott.sql - create scott tables
+- set_seq_to.sql - to reset sequences
+- sqp_set.sql,save_sqp_set.sql,rest_sqp_set.sql - deal with SQL*Plus settings
+- cls.sql - clear screen
