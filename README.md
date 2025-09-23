@@ -69,7 +69,6 @@
 - logsw.sql - show redo log switches
 - hb.sql - show hot blocks
 - dl.sql - DDL and DML locks
-- dp_jobs.sql - data pump jobs
 - tops.sql - top 10 sessions
 - cursor_params.sql, cursor_params10.sql - cursor parameters
 - awr_snap.sql - generate AWR report FROM snapshots
@@ -94,7 +93,9 @@
 - explain10g.sql - show explain plan for a target.sql statement
 - xpl.sql - show the plan of an SQL ID
 - arch.sql - show archived logs by hour
+- dp_jobs.sql - monitoring data pump jobs
 - moni_rman.sql - monitor a rman operation
+- moni_long.sql - monitor long operations
 - getcount.sql - show the row number from tables in dba_tables at the latest scn
 - getscn.sql - determine the instantiation scn of the database (for goldengate)
 
