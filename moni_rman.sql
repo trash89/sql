@@ -5,10 +5,10 @@
 --
 @save_sqp_set
 
-set lines 140 pages 50
+set lines 120 pages 50
 col sidser          for a14     head 'sid,serial#'
 col opname          for a30     head "Oper."
-col pct_complete    for 99.99   head "% Comp."
+col pct_complete    for 999.99  head "% Comp."
 col start_time      for a17     head "Start|Time"
 col hours_running   for 9999.99 head "Hours|Running"
 col minutes_left    for 999,999 head "Minutes|Left"
