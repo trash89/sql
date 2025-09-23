@@ -17,11 +17,11 @@ ttitle left 'v$session_longops'
 SELECT 
      to_char(sid)||','||to_char(serial#)  as sidser
     ,opname
-    ,round(sofar/totalwork*100,2)                                                       as pct_complete
-    ,to_char(start_time,'dd/mm/yyyy hh24:mi')                                           as start_time
-    ,(sysdate-start_time)*24                                                            as hours_running
-    ,((sysdate-start_time)*24*60)/(sofar/totalwork) - (sysdate-start_time)*24*60        as minutes_left
-    ,to_char((sysdate-start_time)/(sofar/totalwork) + start_time,'dd/mm/yyyy hh24:mi')  as est_comp_time
+    ,round(sofar/nullif(totalwork,0)*100,2)                                                                 as pct_complete
+    ,to_char(start_time,'dd/mm/yyyy hh24:mi')                                                               as start_time
+    ,(sysdate-start_time)*24                                                                                as hours_running
+    ,((sysdate-start_time)*24*60)/nullif((sofar/nullif(totalwork,0)),0) - (sysdate-start_time)*24*60        as minutes_left
+    ,to_char((sysdate-start_time)/nullif((sofar/nullif(totalwork,0)),0) + start_time,'dd/mm/yyyy hh24:mi')  as est_comp_time
 FROM 
     gv$session_longops
 WHERE 
