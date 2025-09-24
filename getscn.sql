@@ -7,11 +7,13 @@
 
 set lines 50 pages 50
 
+alter system switch logfile;
 SELECT MIN(SCN) as INSTANTIATION_SCN
   FROM (SELECT MIN(START_SCN) as SCN 
         FROM gv$transaction 
         UNION ALL 
         SELECT CURRENT_SCN FROM gv$database
       );
+alter system switch logfile;
 
 @rest_sqp_set
