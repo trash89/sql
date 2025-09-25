@@ -11,7 +11,7 @@ col account_status          for a20
 col default_tablespace      for a25 head 'Default TBS'
 col temporary_tablespace    for a25 head 'Temp TBS'
 col createdc                for a20 head 'Created'
-col password_versions       for a16 head 'PwdVers'
+col password_versions       for a17 head 'PwdVers'
 col oracle_maintained       for a7  head 'OraMnt'
 ttitle left 'dba_users'
 SELECT * FROM (
