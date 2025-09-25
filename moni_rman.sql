@@ -25,8 +25,8 @@ SELECT
 FROM 
     gv$session_longops
 WHERE 
-    opname LIKE 'RMAN%'
-    AND opname NOT LIKE '%aggregate%'
+    upper(opname) LIKE '%RMAN%'
+    AND upper(opname) NOT LIKE '%AGGREGATE%'
     AND totalwork != 0
     AND sofar <> totalwork
     AND inst_id=to_number(sys_context('USERENV','INSTANCE'))
