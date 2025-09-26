@@ -16,6 +16,7 @@ prompt Adding OGG_KEY_ID raw(16) column ...
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
+prompt Generating triggers enable/disable statements ...
 set head off autoprint off echo off show off tab off termout on newp none feed off lines 4096 long 5000000
 spool /tmp/disable_triggers.sql
 SELECT 
