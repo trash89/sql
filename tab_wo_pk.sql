@@ -5,13 +5,14 @@
 --
 @save_sqp_set
 
-set lines 200 pages 50
+set lines 70 pages 50
 
 undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 
-select  owner,
-	table_name
+col tab                 for a60              head 'Table'
+select  
+    owner||'.'||table_name as tab
 from    
         dba_tables dt
 where   not exists (
