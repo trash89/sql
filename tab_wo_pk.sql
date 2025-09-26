@@ -18,7 +18,6 @@ from
     dba_tables dt
 where 
     not exists (select 'true' from dba_constraints dc where dc.table_name = dt.table_name and dc.constraint_type in ('P','U'))
---    and owner in (select username from dba_users where oracle_maintained='N')
     and not exists(select 'true' from dba_indexes i where i.table_owner=dt.owner and i.table_name=dt.table_name and i.uniqueness='UNIQUE')
     and owner like upper('%&&own%')
 order by 
