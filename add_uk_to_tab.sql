@@ -17,7 +17,7 @@ alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
 prompt Generating triggers enable/disable statements ...
-set head off autoprint off echo off show off tab off termout on newp none feed off lines 4096 long 5000000
+set head off autoprint off echo off show off tab off termout off newp none feed off lines 4096 long 5000000
 spool /tmp/disable_triggers.sql
 SELECT 
     'alter trigger '||owner||'.'||trigger_name||' disable;'
@@ -42,6 +42,7 @@ WHERE
 ;
 spool off
 
+set termout on
 prompt Disabling triggers ...
 @/tmp/disable_triggers.sql
 
