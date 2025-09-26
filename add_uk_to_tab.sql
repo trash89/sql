@@ -12,11 +12,11 @@ undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 accept tab char prompt 'Table?(%)      : ' default ''
 
-alter table %&&own%.&&tab% add OGG_KEY_ID raw(16);
-alter table %&&own%.&&tab% modify OGG_KEY_ID default sys_guid(); 
+alter table &&own.&&tab add OGG_KEY_ID raw(16);
+alter table &&own.&&tab modify OGG_KEY_ID default sys_guid(); 
 
 DECLARE 
-    cursor C1 is select ROWID from %&&own%.&&tab% where OGG_KEY_ID is null;
+    cursor C1 is select ROWID from &&own.&&tab where OGG_KEY_ID is null;
     finished number:=0; 
     commit_cnt number:=0; 
     err_msg varchar2(150);
@@ -28,7 +28,7 @@ BEGIN
         finished:=1;
         BEGIN
             for C1REC in C1 LOOP
-                update %&&own%.&&tab% set OGG_KEY_ID = sys_guid() where ROWID = C1REC.ROWID;
+                update &&own.&&tab set OGG_KEY_ID = sys_guid() where ROWID = C1REC.ROWID;
                 commit_cnt:= commit_cnt + 1;
                 IF (commit_cnt = 10000) then
                     commit;
@@ -50,7 +50,7 @@ BEGIN
 END;
 /
 
-create unique index %&&own%.OGG_&&tab%_UI on %&&own%.&&tab% (OGG_KEY_ID) logging online;
+create unique index &&own.OGG_&&tab_UI on &&own.&&tab (OGG_KEY_ID) logging online;
 
 
 undef tab
