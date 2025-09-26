@@ -12,6 +12,7 @@ undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 accept tab char prompt 'Table?(%)      : ' default ''
 
+prompt Adding OGG_KEY_ID raw(16) column ...
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
@@ -26,7 +27,7 @@ WHERE
    AND status='ENABLED'
 ;
 
-
+prompt Updating OGG_KEY_ID ...
 DECLARE 
     cursor C1 is select ROWID from "&&own"."&&tab" where OGG_KEY_ID is null;
     finished number:=0; 
@@ -62,6 +63,7 @@ BEGIN
 END;
 /
 
+prompt Creating the index "&&own"."OGGUK_&&tab" ...
 create unique index "&&own"."OGGUK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
 
 prompt For GoldenGate:
