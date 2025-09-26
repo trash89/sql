@@ -10,7 +10,7 @@ set lines 70 pages 50
 undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 
-col tab                 for a60              head 'Table'
+col tab                 for a60              head 'Table without PK/UK'
 select  
     owner||'.'||table_name as tab
 from    
