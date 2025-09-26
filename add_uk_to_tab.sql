@@ -16,9 +16,10 @@ prompt Adding OGG_KEY_ID raw(16) column ...
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
-col trig for a60 head 'Trigger to disable'
+set head off autoprint off echo off show off tab off termout on newp none feed off lines 4096 long 5000000
+spool /tmp/disable_triggers.sql
 SELECT 
-    owner||'.'||trigger_name as trig
+    'alter trigger '||owner||'.'||trigger_name||' disable;'
 FROM
    dba_triggers
 WHERE
@@ -26,10 +27,27 @@ WHERE
    AND table_name=upper('&&tab')
    AND status='ENABLED'
 ;
+spool off
+spool /tmp/enable_triggers.sql
+SELECT 
+    'alter trigger '||owner||'.'||trigger_name||' enable;'
+FROM
+   dba_triggers
+WHERE
+   table_owner=upper('&&own')
+   AND table_name=upper('&&tab')
+   AND status='ENABLED'
+;
+spool off
+
+@/tmp/disable_triggers.sql
+@rest_sqp_set
 
 prompt Updating OGG_KEY_ID ...
+set serveroutput on
 DECLARE 
     cursor C1 is select ROWID from "&&own"."&&tab" where OGG_KEY_ID is null;
+    cursor c2 is select owner||'.'||trigger_name FROM dba_triggers WHERE table_owner=upper('&&own') AND table_name=upper('&&tab') AND status='ENABLED';
     finished number:=0; 
     commit_cnt number:=0; 
     err_msg varchar2(150);
@@ -62,6 +80,7 @@ BEGIN
     END IF;
 END;
 /
+@/tmp/enable_triggers.sql
 
 prompt Creating the index "&&own"."OGGUK_&&tab" ...
 create unique index "&&own"."OGGUK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;

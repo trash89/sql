@@ -12,6 +12,7 @@
 - jobs.sql - show scheduled and running jobs
 - tab.sql - show tables 
 - tab_wo_pk.sql - show tables without PK/UK constraints and unique indexes
+- add_uk_to_tab.sql - add a unique index to a table, special for GoldenGate
 - tabpart.sql - show partitioned tables 
 - tabcol.sql - show columns in tables
 - tabhisto.sql - show table histograms
