@@ -15,6 +15,18 @@ accept tab char prompt 'Table?(%)      : ' default ''
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
+col trig for a60 head 'Trigger Name'
+SELECT 
+    owner||'.'||trigger_name as trig
+FROM
+   dba_triggers
+WHERE
+   table_owner=upper('&&own')
+   AND table_name=upper('&&tab')
+   AND status='ENABLED'
+;
+
+
 DECLARE 
     cursor C1 is select ROWID from "&&own"."&&tab" where OGG_KEY_ID is null;
     finished number:=0; 
@@ -50,8 +62,19 @@ BEGIN
 END;
 /
 
-create unique index "&&own"."OGG_UK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
+create unique index "&&own"."OGGUK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
 
+prompt For GoldenGate:
+prompt
+prompt Create Table Supplemental Log Group in Source Database:
+prompt
+prompt GGSCI> dblogin userid <username>, password <password>
+prompt GGSCI> add trandata "&&own"."&&tab", COLS (OGG_KEY_ID), nokey
+prompt
+prompt Specify OGG_KEY_ID for Table Key in Extract Parameter File:
+prompt
+prompt TABLE "&&own"."&&tab", KEYCOLS (OGG_KEY_ID);
+prompt
 
 undef tab
 undef own
