@@ -10,25 +10,19 @@ set lines 70 pages 50
 undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 
-col tab                 for a60              head 'Table without PK/UK'
+col tab for a60 head 'Tables without PK/UK'
 select  
     owner||'.'||table_name as tab
 from    
-        dba_tables dt
-where   not exists (
-        select  'TRUE'
-        from    
-                dba_constraints dc
-        where   
-                dc.table_name = dt.table_name
-                and     dc.constraint_type in ('P','U')
-        )
-and owner not in (select username from dba_users where oracle_maintained='Y')
-and not exists(select 'true' from dba_indexes i where i.table_owner=dt.owner and i.table_name=dt.table_name and i.uniqueness='UNIQUE')
-and owner like upper('%&&own%')
+    dba_tables dt
+where 
+    not exists (select 'true' from dba_constraints dc where dc.table_name = dt.table_name and dc.constraint_type in ('P','U'))
+    and owner not in (select username from dba_users where oracle_maintained='Y')
+    and not exists(select 'true' from dba_indexes i where i.table_owner=dt.owner and i.table_name=dt.table_name and i.uniqueness='UNIQUE')
+    and owner like upper('%&&own%')
 order by 
-         owner
-        ,table_name
+     owner
+    ,table_name
 ;
 
 undef own
