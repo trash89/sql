@@ -6,7 +6,7 @@
 --
 @save_sqp_set
 
-set lines 200 pages 50
+set lines 150 pages 50
 
 undef tab
 undef own
