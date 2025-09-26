@@ -2,7 +2,7 @@
 --  Script    : add_uk_to_tab.sql
 --  Purpose   : add unique index to a table
 --            : See : How to Handle Tables Without Primary Keys or Unique Indexes With Oracle GoldenGate (Doc ID 1271578.1)
---  Tested on : 12c,19c,23c
+--  Tested on : 12c,19c
 --
 @save_sqp_set
 
