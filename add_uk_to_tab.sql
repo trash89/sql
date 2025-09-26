@@ -66,7 +66,8 @@ END;
 prompt Creating the index "&&own"."OGGUK_&&tab" ...
 create unique index "&&own"."OGGUK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
 
-prompt For GoldenGate:
+prompt ----------------------------------------------------------------------------------------------
+prompt Note for GoldenGate:
 prompt
 prompt Create Table Supplemental Log Group in Source Database:
 prompt
@@ -76,7 +77,7 @@ prompt
 prompt Specify OGG_KEY_ID for Table Key in Extract Parameter File:
 prompt
 prompt TABLE "&&own"."&&tab", KEYCOLS (OGG_KEY_ID);
-prompt
+prompt ----------------------------------------------------------------------------------------------
 
 undef tab
 undef own
