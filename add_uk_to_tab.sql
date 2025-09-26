@@ -50,7 +50,7 @@ BEGIN
 END;
 /
 
-create unique index "&&own"."OGG_&&tab_UI" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
+create unique index "&&own"."OGG_UK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
 
 
 undef tab
