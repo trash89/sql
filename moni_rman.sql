@@ -32,29 +32,4 @@ WHERE
     AND inst_id=to_number(sys_context('USERENV','INSTANCE'))
 ;
 
-col command_id              for a33
-col operation               for a33
-col start_timec             for a17     head "Start|Time"
-col end_timec               for a17     head "End|Time"
-col status                  for a23
-col input_type              for a13     head "Input|type"
-col input_bytes_display     for a10     head "Input|bytes"
-col output_bytes_display    for a10     head "Output|bytes"
-ttitle left 'rc_rman_backup_subjob_details'
-SELECT
-     command_id
-    ,operation
-    ,to_char(start_time,'dd/mm/yyyy hh24:mi') as start_timec
-    ,to_char(end_time,'dd/mm/yyyy hh24:mi')   as end_timec
-    ,status
-    ,input_type
-    ,input_bytes_display
-    ,output_bytes_display
-FROM
-    rc_rman_backup_subjob_details
-WHERE
-    upper(status) like '%RUNNING%'
-;
-
-
 @rest_sqp_set
