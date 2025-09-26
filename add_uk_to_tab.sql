@@ -15,7 +15,7 @@ accept tab char prompt 'Table?(%)      : ' default ''
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
 
-col trig for a60 head 'Trigger Name'
+col trig for a60 head 'Trigger to disable'
 SELECT 
     owner||'.'||trigger_name as trig
 FROM
