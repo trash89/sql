@@ -50,7 +50,6 @@ prompt Disabling triggers ...
 prompt Updating OGG_KEY_ID ...
 DECLARE 
     cursor C1 is select ROWID from "&&own"."&&tab" where OGG_KEY_ID is null;
-    cursor c2 is select owner||'.'||trigger_name FROM dba_triggers WHERE table_owner=upper('&&own') AND table_name=upper('&&tab') AND status='ENABLED';
     finished number:=0; 
     commit_cnt number:=0; 
     err_msg varchar2(150);
