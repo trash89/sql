@@ -11,6 +11,7 @@
 - dir.sql - directories configuration
 - jobs.sql - show scheduled and running jobs
 - tab.sql - show tables 
+- tab_wo_pk.sql - show tables without PK/UK constraints and unique indexes
 - tabpart.sql - show partitioned tables 
 - tabcol.sql - show columns in tables
 - tabhisto.sql - show table histograms
