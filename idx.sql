@@ -7,29 +7,30 @@
 
 set lines 156 pages 50
 
+undef idx
 undef tab
 undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 accept idx char prompt 'Index?(%)      : ' default ''
 accept tab char prompt 'Table?(%)      : ' default ''
 
-col idx              for a60           head 'Index'
-col index_type       for a25           head 'Type'
-col table_name       for a30           head 'Table'
-col tablespace_name  for a30           head 'Tablespace'
-col stat             for a6            head 'Status'
-col num_rows         for 99,999,999,999   head 'NrRows'
-col distinct_keys    for 99,999,999,999   head 'Distinct Keys'
-col lasta            for a10           head 'LastAnlz'
-col ini_trans        for 999           head 'IniT'
-col pct_free         for 999           head '%f'
-col degree           for a3            head 'Par'
-col partitioned      for a4            head 'Part'
-col logging          for a4            head 'Logg'
-col uniq             for a6            head 'Unique'
-col compr            for a5            head 'Compr'
-col join_index       for a4            head 'Join'
-col generated        for a3            head 'Gen'
+col idx              for a60            head 'Index'
+col index_type       for a25            head 'Type'
+col table_name       for a30            head 'Table'
+col tablespace_name  for a30            head 'Tablespace'
+col stat             for a6             head 'Status'
+col num_rows         for 99,999,999,999 head 'NrRows'
+col distinct_keys    for 99,999,999,999 head 'Distinct Keys'
+col lasta            for a10            head 'LastAnlz'
+col ini_trans        for 999            head 'IniT'
+col pct_free         for 999            head '%f'
+col degree           for a3             head 'Par'
+col partitioned      for a4             head 'Part'
+col logging          for a4             head 'Logg'
+col uniq             for a6             head 'Unique'
+col compr            for a5             head 'Compr'
+col join_index       for a4             head 'Join'
+col generated        for a3             head 'Gen'
 set feed off
 ttitle left 'dba_indexes'
 SELECT
@@ -69,15 +70,14 @@ FROM
    dba_indexes
 WHERE
    owner LIKE upper('%&&own%')
---   AND index_name LIKE upper('%&&idx%')
    AND index_name LIKE '%'||upper(substr('&&idx%',instr('&&idx%','.')+1))
---   AND table_name LIKE upper('%&&tab%')   
    AND table_name LIKE '%'||upper(substr('&&tab%',instr('&&tab%','.')+1))   
 ORDER BY
    table_name
   ,num_rows
 ;
 
+undef idx
 undef tab
 undef own
 

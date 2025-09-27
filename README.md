@@ -25,6 +25,7 @@
 - iot.sql - show IOTs
 - trig.sql - show triggers
 - idx.sql - show indexes
+- idx_ogg.sql - show indexes like OGGUK_* created to reinforce unicity on tables without PK/UK (for GoldenGate)
 - idxpart.sql - show indexes partitions
 - idxcol.sql - show index columns
 - objs.sql - show objects
