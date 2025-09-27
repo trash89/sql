@@ -13,6 +13,8 @@ undef own
 accept own char prompt 'Owner?(%)      : ' default ''
 accept tab char prompt 'Table?(%)      : ' default ''
 
+alter session set DDL_LOCK_TIMEOUT = 60;
+
 prompt Adding OGG_KEY_ID raw(16) column ...
 alter table "&&own"."&&tab" add OGG_KEY_ID raw(16);
 alter table "&&own"."&&tab" modify OGG_KEY_ID default sys_guid(); 
@@ -84,6 +86,8 @@ END;
 /
 prompt Enabling triggers ...
 @/tmp/enable_triggers.sql
+
+alter table "&&own"."&&tab" modify (OGG_KEY_ID not null);
 
 prompt Creating the index "&&own"."OGGUK_&&tab" ...
 create unique index "&&own"."OGGUK_&&tab" on "&&own"."&&tab" (OGG_KEY_ID) logging online;
